@@ -2,10 +2,14 @@ import { createRouter, createWebHistory } from "vue-router";
 import BoardListView from "../views/BoardListView.vue";
 import BoardViewView from "@/views/BoardViewView.vue";
 import BoardWriteView from "@/views/BoardWriteView.vue";
+import RouterMainView from "@/views/routers/RouterMainView.vue";
+import RouterParamView from "@/views/routers/RouterParamView.vue";
+import RouterQueryView from "@/views/routers/RouterQueryView.vue";
 
 const routes = [
   {
     path: "/",
+    alias: ["/list"],
     name: "list",
     component: BoardListView,
   },
@@ -18,6 +22,22 @@ const routes = [
     path: "/write",
     name: "write",
     component: BoardWriteView,
+  },
+  {
+    path: "/router-main",
+    name: "routerMain",
+    component: RouterMainView,
+  },
+  {
+    path: "/router-param/:message?",
+    name: "routerParam",
+    component: RouterParamView,
+    props: true,
+  },
+  {
+    path: "/router-query",
+    name: "routerQuery",
+    component: RouterQueryView,
   },
 ];
 
