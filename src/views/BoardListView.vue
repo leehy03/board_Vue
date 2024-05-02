@@ -28,7 +28,11 @@
       </tr>
     </thead>
     <tbody>
-      <tr v-for="board in boardList" :key="board.boardNo">
+      <tr
+        v-for="board in boardList"
+        :key="board.boardNo"
+        @click="moveViewPage(board.boardNo)"
+      >
         <td>{{ board.boardNo }}</td>
         <td>{{ board.title }}</td>
         <td>{{ board.author }}</td>
@@ -37,13 +41,23 @@
       </tr>
     </tbody>
   </table>
+  <div class="col-auto">
+    <button type="button" class="btn btn-primary mb-4" @click="moveWritePage()">
+      Write
+    </button>
+  </div>
+  <div>
+    <RouterLink to="/router-main">Go To RouterMainView</RouterLink>
+  </div>
 </template>
 <script>
 import { ref, onMounted } from "vue";
 import Axios from "axios";
+import { useRouter } from "vue-router";
 export default {
   name: "BoardListView",
   setup() {
+    const router = useRouter();
     let boardList = ref(new Array());
     let searchKeyword = ref(new String());
 
@@ -59,18 +73,27 @@ export default {
         },
       })
         .then(function (response) {
+          console.log(response.data);
           boardList.value = response.data;
-          console.log(boardList);
         })
         .catch(function (error) {
           console.log(error);
         });
+    };
+    const moveViewPage = (boardNo) => {
+      router.push({ name: "view", query: { no: boardNo } });
+    };
+
+    const moveWritePage = () => {
+      router.push({ name: "write" });
     };
 
     return {
       boardList,
       searchKeyword,
       searchBoard,
+      moveViewPage,
+      moveWritePage,
     };
   },
 };
