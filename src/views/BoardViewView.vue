@@ -3,7 +3,9 @@
     {{ board.boardNo }}
     {{ board.title }}
     {{ board.author }}
-    {{ board.createdDt }}
+    {{ board.password }}
+    {{ board.content }}
+    {{ formatDate(board.createdDt) }}
     {{ board.views }}
   </div>
 </template>
@@ -28,7 +30,6 @@ export default {
         },
       })
         .then(function (response) {
-          console.log(response.data);
           board.value = response.data;
         })
         .catch(function (error) {
@@ -40,6 +41,17 @@ export default {
       searchBoardView,
       board,
     };
+  },
+  computed: {
+    formatDate() {
+      return (val) => {
+        let formattedDate = "";
+        if (val) {
+          formattedDate = val.substr(0, 10);
+        }
+        return formattedDate;
+      };
+    },
   },
 };
 </script>

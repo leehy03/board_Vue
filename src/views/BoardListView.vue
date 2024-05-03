@@ -36,7 +36,7 @@
         <td>{{ board.boardNo }}</td>
         <td>{{ board.title }}</td>
         <td>{{ board.author }}</td>
-        <td>{{ board.createdDt }}</td>
+        <td>{{ formatDate(board.createdDt) }}</td>
         <td>{{ board.views }}</td>
       </tr>
     </tbody>
@@ -95,6 +95,17 @@ export default {
       moveViewPage,
       moveWritePage,
     };
+  },
+  computed: {
+    formatDate() {
+      return (val) => {
+        let formattedDate = "";
+        if (val) {
+          formattedDate = val.substr(0, 10);
+        }
+        return formattedDate;
+      };
+    },
   },
 };
 </script>
