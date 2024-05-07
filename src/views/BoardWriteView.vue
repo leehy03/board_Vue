@@ -47,12 +47,20 @@
   </div>
   <div class="row mb-3 justify-content-end">
     <div class="col-1">
-      <button type="button" class="w-100 btn btn-primary" @click="saveBoard">
+      <button
+        type="button"
+        class="w-100 btn btn-outline-primary"
+        @click="saveBoard"
+      >
         Save
       </button>
     </div>
     <div class="col-1">
-      <button type="button" class="w-100 btn btn-danger" @click="moveBackPage">
+      <button
+        type="button"
+        class="w-100 btn btn-outline-danger"
+        @click="moveBackPage"
+      >
         Back
       </button>
     </div>
