@@ -5,6 +5,7 @@ import BoardWriteView from "@/views/BoardWriteView.vue";
 import RouterMainView from "@/views/routers/RouterMainView.vue";
 import RouterParamView from "@/views/routers/RouterParamView.vue";
 import RouterQueryView from "@/views/routers/RouterQueryView.vue";
+import BoardModifyView from "@/views/BoardModifyView.vue";
 
 const routes = [
   {
@@ -22,6 +23,12 @@ const routes = [
     path: "/write",
     name: "write",
     component: BoardWriteView,
+  },
+  {
+    path: "/modify/:no",
+    name: "modify",
+    component: BoardModifyView,
+    props: true,
   },
   {
     path: "/router-main",
