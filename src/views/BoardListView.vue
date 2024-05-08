@@ -86,8 +86,6 @@ export default {
     });
 
     const searchBoard = () => {
-      console.log(keywordType);
-      console.log(typeof keywordType);
       Axios.get("http://localhost:8070/boards/list", {
         params: {
           keyword: searchKeyword.value,
@@ -95,7 +93,6 @@ export default {
         },
       })
         .then(function (response) {
-          console.log(response.data);
           boardList.value = response.data;
         })
         .catch(function (error) {
