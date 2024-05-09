@@ -74,14 +74,17 @@ export default {
   name: "BoardWriteView",
   setup() {
     const { proxy } = getCurrentInstance();
-    console.log(proxy);
     const router = useRouter();
     const author = ref(new String());
     const password = ref(new String());
     const title = ref(new String());
     const content = ref(new String());
 
+    /**
+     * 작성된 글을 저장합니다.
+     */
     const saveBoard = () => {
+      // 유효성 검사 후 실패 시 alert 및 focusing
       if (author.value == "" || author.value == null) {
         alert("작성자를 입력해 주세요");
         proxy.$refs.authorRef.focus();
@@ -122,10 +125,14 @@ export default {
         });
     };
 
+    /**
+     * 목록 페이지로 이동합니다.
+     */
     const moveBackPage = () => {
       router.push({ name: "list" });
       // router.go(-1);
     };
+
     return {
       saveBoard,
       moveBackPage,

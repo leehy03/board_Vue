@@ -27,16 +27,16 @@
           List
         </button>
       </div>
-      <div class="col-1 offset-md-9">
+      <div class="col-1 ms-auto">
         <button
           type="button"
           class="w-100 btn btn-outline-primary"
-          @click="modifyBoard"
+          @click="moveModifyPage"
         >
           Modify
         </button>
       </div>
-      <div class="col-1 ms-auto">
+      <div class="col-1">
         <button
           type="button"
           class="w-100 btn btn-outline-danger"
@@ -58,35 +58,41 @@ export default {
     const route = useRoute();
     const router = useRouter();
     const board = ref(new Object());
-    const password = ref(new String());
 
     onBeforeMount(() => {
       searchBoardView();
     });
 
+    /**
+     * 작성된 게시글을 삭제합니다.
+     */
     const deleteBoard = () => {
-      Axios.delete("http://localhost:8070/boards", {
-        params: {
-          no: route.query.no,
-        },
-      })
-        .then(() => {
-          const password = prompt("비밀번호를 입력해 주세요.");
-          if (password != null) {
-            if (password == "") {
-              alert("비밀번호를 입력해 주세요.");
-            } else if (password == board.value.password) {
+      const password = prompt("비밀번호를 입력하세요.");
+      if (password != null) {
+        if (password == "") {
+          alert("비밀번호를 입력하세요.");
+        } else if (password == board.value.password) {
+          Axios.delete("http://localhost:8070/boards", {
+            params: {
+              no: route.query.no,
+            },
+          })
+            .then(() => {
+              alert("삭제가 완료되었습니다.");
               router.push({ name: "list" });
-            } else {
-              alert("비밀번호가 일치하지 않습니다.");
-            }
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+        } else {
+          alert("비밀번호가 일치하지 않습니다.");
+        }
+      }
     };
 
+    /**
+     * 작성된 게시글을 가져옵니다.
+     */
     const searchBoardView = () => {
       Axios.get("http://localhost:8070/boards", {
         params: {
@@ -106,19 +112,16 @@ export default {
         });
     };
 
-    const modifyBoard = () => {
-      const password = prompt("비밀번호를 입력해 주세요.");
-      if (password != null) {
-        if (password == "") {
-          alert("비밀번호를 입력해 주세요.");
-        } else if (password == board.value.password) {
-          router.push({ name: "modify", params: { no: board.value.boardNo } });
-        } else {
-          alert("비밀번호가 일치하지 않습니다.");
-        }
-      }
+    /**
+     * 수정 페이지로 이동합니다.
+     */
+    const moveModifyPage = () => {
+      router.push({ name: "modify", params: { no: board.value.boardNo } });
     };
 
+    /**
+     * 목록 페이지로 이동합니다.
+     */
     const moveListPage = () => {
       router.push({ name: "list" });
       // router.go(-1);
@@ -126,11 +129,10 @@ export default {
 
     return {
       searchBoardView,
-      modifyBoard,
+      moveModifyPage,
       moveListPage,
       deleteBoard,
       board,
-      password,
     };
   },
   computed: {
