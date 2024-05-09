@@ -18,6 +18,14 @@ const routes = [
     path: "/view",
     name: "view",
     component: BoardViewView,
+    beforeEnter: (to, from, next) => {
+      console.log(from);
+      if (to.query.no == "" || Object.keys(to.query).length == 0) {
+        alert("잘못된 접근입니다.");
+        next({ name: from.name });
+      }
+      next();
+    },
   },
   {
     path: "/write",

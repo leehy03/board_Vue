@@ -1,53 +1,55 @@
 <template>
-  <div class="row mb-3">
-    <div class="col-4">작성자 {{ formatDate(board.author) }}</div>
-    <div class="col-4">작성날짜 {{ formatDate(board.createdDt) }}</div>
-    <div class="col-4">조회수 {{ board.views }}</div>
-  </div>
-  <div class="row mb-3">
-    <div class="col-12">
-      제목
-      <div class="form-control custom-min-height">{{ board.title }}</div>
+  <div v-if="Object.keys(board).length > 0">
+    <div class="row mb-3">
+      <div class="col-4">작성자 {{ board.author }}</div>
+      <div class="col-4">작성날짜 {{ formatDate(board.createdDt) }}</div>
+      <div class="col-4">조회수 {{ board.views }}</div>
     </div>
-  </div>
-  <div class="row mb-3">
-    <div class="col-12">
-      내용
-      <div class="form-control custom-min-height">{{ board.content }}</div>
+    <div class="row mb-3">
+      <div class="col-12">
+        제목
+        <div class="form-control custom-min-height">{{ board.title }}</div>
+      </div>
     </div>
-  </div>
-  <div class="row mb-3">
-    <div class="col-1">
-      <button
-        type="button"
-        class="w-100 btn btn-outline-success"
-        @click="moveListPage"
-      >
-        List
-      </button>
+    <div class="row mb-3">
+      <div class="col-12">
+        내용
+        <div class="form-control custom-min-height">{{ board.content }}</div>
+      </div>
     </div>
-    <div class="col-1 offset-md-9">
-      <button
-        type="button"
-        class="w-100 btn btn-outline-primary"
-        @click="modifyBoard"
-      >
-        Modify
-      </button>
-    </div>
-    <div class="col-1 ms-auto">
-      <button
-        type="button"
-        class="w-100 btn btn-outline-danger"
-        @click="deleteBoard"
-      >
-        Delete
-      </button>
+    <div class="row mb-3">
+      <div class="col-1">
+        <button
+          type="button"
+          class="w-100 btn btn-outline-success"
+          @click="moveListPage"
+        >
+          List
+        </button>
+      </div>
+      <div class="col-1 offset-md-9">
+        <button
+          type="button"
+          class="w-100 btn btn-outline-primary"
+          @click="modifyBoard"
+        >
+          Modify
+        </button>
+      </div>
+      <div class="col-1 ms-auto">
+        <button
+          type="button"
+          class="w-100 btn btn-outline-danger"
+          @click="deleteBoard"
+        >
+          Delete
+        </button>
+      </div>
     </div>
   </div>
 </template>
 <script>
-import { ref, onMounted } from "vue";
+import { ref, onBeforeMount } from "vue";
 import Axios from "axios";
 import { useRoute, useRouter } from "vue-router";
 export default {
@@ -56,10 +58,9 @@ export default {
     const route = useRoute();
     const router = useRouter();
     const board = ref(new Object());
-    const author = ref(new String());
     const password = ref(new String());
 
-    onMounted(() => {
+    onBeforeMount(() => {
       searchBoardView();
     });
 
@@ -93,8 +94,12 @@ export default {
         },
       })
         .then((response) => {
-          board.value = response.data;
-          author.value = response.data.author;
+          if (typeof response.data == "string") {
+            alert("데이터가 존재하지 않습니다.");
+            router.go(-1);
+          } else {
+            board.value = response.data;
+          }
         })
         .catch((error) => {
           console.log(error);
@@ -125,7 +130,6 @@ export default {
       moveListPage,
       deleteBoard,
       board,
-      author,
       password,
     };
   },
