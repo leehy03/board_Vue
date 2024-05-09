@@ -1,5 +1,11 @@
 <template>
-  <div class="container mt-3">
-    <router-view />
-  </div>
+  <CustomLayout />
 </template>
+<script>
+import CustomLayout from "@/components/layouts/CustomLayout.vue";
+export default {
+  components: {
+    CustomLayout,
+  },
+};
+</script>
