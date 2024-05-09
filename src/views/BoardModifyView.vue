@@ -91,6 +91,7 @@ export default {
       Axios.get("http://localhost:8070/boards", {
         params: {
           no: route.params.no,
+          page: "modify",
         },
       })
         .then((response) => {
