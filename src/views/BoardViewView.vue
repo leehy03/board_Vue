@@ -17,7 +17,7 @@
         <div class="form-control custom-min-height">{{ board.content }}</div>
       </div>
     </div>
-    <div class="row mb-3">
+    <div class="row mb-5">
       <div class="col-1">
         <button
           type="button"
@@ -46,14 +46,19 @@
         </button>
       </div>
     </div>
+    <CommentComponent />
   </div>
 </template>
 <script>
 import { ref, onBeforeMount } from "vue";
+import CommentComponent from "@/components/CommentComponent.vue";
 import Axios from "axios";
 import { useRoute, useRouter } from "vue-router";
 export default {
   name: "BoardViewView",
+  components: {
+    CommentComponent,
+  },
   setup() {
     const route = useRoute();
     const router = useRouter();
