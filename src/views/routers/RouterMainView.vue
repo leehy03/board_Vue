@@ -1,3 +1,28 @@
+<script setup>
+import MainChild from "@/components/MainChild.vue"
+import { ref } from "vue"
+import { useRouter } from "vue-router"
+
+const router = useRouter()
+const message = ref(new String())
+const parentMessage = ref(new String())
+const childMessage = ref(new String())
+
+const moveToParamView = () => {
+  // 'params' can not be used with 'path'
+  // router.push({ path: "/router-query", params: { message: message } }) X
+  router.push({ name: "routerParam", params: { message: message.value } })
+}
+
+const moveToQueryView = () => {
+  router.push({ path: "/router-query", query: { message: message.value } })
+}
+
+const updateChildMessage = (value) => {
+  childMessage.value = value
+}
+</script>
+
 <template>
   <div class="mb-5">
     <RouterLink to="/list">Go To BoardListView</RouterLink>
@@ -8,12 +33,7 @@
       <label class="col-form-label">다른 페이지로 보낼 메시지</label>
     </div>
     <div class="col-3">
-      <input
-        type="text"
-        class="form-control"
-        placeholder="메시지를 입력하세요."
-        v-model="message"
-      />
+      <input type="text" class="form-control" placeholder="메시지를 입력하세요." v-model="message" />
     </div>
     <div class="offset-2 col-2">
       <button type="button" class="btn btn-primary" @click="moveToParamView()">
@@ -33,12 +53,7 @@
       <label class="col-form-label">자식에게 보낼 메시지</label>
     </div>
     <div class="col-3">
-      <input
-        type="text"
-        class="form-control"
-        placeholder="메시지를 입력하세요."
-        v-model="parentMessage"
-      />
+      <input type="text" class="form-control" placeholder="메시지를 입력하세요." v-model="parentMessage" />
     </div>
   </div>
   <div class="row mb-5">
@@ -46,49 +61,6 @@
     <div>자식에서 받아온 메시지: {{ childMessage }}</div>
   </div>
   <div class="row">
-    <MainChild
-      @changeMessage="updateChildMessage"
-      :parentMessage="parentMessage"
-    />
+    <MainChild @changeMessage="updateChildMessage" :parentMessage="parentMessage" />
   </div>
 </template>
-<script>
-import MainChild from "@/components/MainChild.vue";
-import { ref } from "vue";
-import { useRouter } from "vue-router";
-export default {
-  name: "RouterMainView",
-  components: {
-    MainChild,
-  },
-  setup() {
-    const router = useRouter();
-    const message = ref(new String());
-    const parentMessage = ref(new String());
-    const childMessage = ref(new String());
-
-    const moveToParamView = () => {
-      // 'params' can not be used with 'path'
-      // router.push({ path: "/router-query", params: { message: message } }); X
-      router.push({ name: "routerParam", params: { message: message.value } });
-    };
-
-    const moveToQueryView = () => {
-      router.push({ path: "/router-query", query: { message: message.value } });
-    };
-
-    const updateChildMessage = (value) => {
-      childMessage.value = value;
-    };
-
-    return {
-      moveToParamView,
-      moveToQueryView,
-      updateChildMessage,
-      message,
-      parentMessage,
-      childMessage,
-    };
-  },
-};
-</script>
