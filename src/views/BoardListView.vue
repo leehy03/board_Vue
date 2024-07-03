@@ -1,41 +1,47 @@
 <script setup>
-import { ref, onMounted, getCurrentInstance, computed } from "vue";
-import Axios from "axios";
-import { useRouter } from "vue-router";
+import { ref, onMounted, computed } from "vue"
+import Axios from "axios"
+import { useRouter } from "vue-router"
 
-const router = useRouter();
-const { proxy } = getCurrentInstance();
-let boardList = ref(new Array());
-let searchKeyword = ref(new String());
-let keywordType = "none";
-
+const router = useRouter()
+// const { proxy } = getCurrentInstance()
+let boardList = ref(new Array())
+let searchKeyword = ref(new String())
+const keywordTypeOptions = [
+  { label: "선택", value: "none" },
+  { label: "작성자", value: "author" },
+  { label: "제목", value: "title" },
+]
+let keywordType = ref(keywordTypeOptions[0].value)
+let keywordTypeRef = ref(null)
 // vue3 lifecycle hooks 찾아보기
 onMounted(() => {
-  searchBoardList();
-});
+  searchBoardList()
+})
 
 /**
  * 게시글 목록을 불러옵니다.
  */
 const searchBoardList = () => {
-  if (keywordType == "none" && searchKeyword.value.length > 0) {
-    alert("유형을 선택해 주세요");
-    proxy.$refs.keywordTypeRef.focus();
-    return false;
+  if (keywordType.value == keywordTypeOptions[0].value && searchKeyword.value.length > 0) {
+    alert("유형을 선택해 주세요")
+    // proxy.$refs.keywordTypeRef.focus()
+    keywordTypeRef.value.focus()
+    return false
   }
   Axios.get("http://localhost:8070/boards/list", {
     params: {
       keyword: searchKeyword.value,
-      type: keywordType,
+      type: keywordType.value,
     },
   })
     .then(function (response) {
-      boardList.value = response.data;
+      boardList.value = response.data
     })
     .catch(function (error) {
-      console.log(error);
-    });
-};
+      console.log(error)
+    })
+}
 
 /**
  * 상세 페이지로 이동합니다.
@@ -43,8 +49,8 @@ const searchBoardList = () => {
  * @param {Number} boardNo
  */
 const moveViewPage = (boardNo) => {
-  router.push({ name: "view", query: { no: boardNo } });
-};
+  router.push({ name: "view", query: { no: boardNo } })
+}
 
 /**
  * 작성 페이지로 이동합니다.
@@ -52,16 +58,7 @@ const moveViewPage = (boardNo) => {
  */
 const moveWritePage = () => {
   router.push({ name: "write" })
-};
-
-/**
- * 셀렉트 박스 선택 시 선택된 value 를 업데이트합니다.
- *
- * @param {Object} event
- */
-const updateKeywordType = (event) => {
-  keywordType = event.target.value
-};
+}
 
 /**
  * 날짜 포멧을 변경합니다.
@@ -71,23 +68,22 @@ const updateKeywordType = (event) => {
  */
 const formatDate = computed(() => {
   return (val) => {
-    let formattedDate = "";
+    let formattedDate = ""
     if (val) {
-      formattedDate = val.substr(0, 10);
+      formattedDate = val.substr(0, 10)
     }
-    return formattedDate;
-  };
+    return formattedDate
+  }
 })
-
 </script>
 
 <template>
   <div class="row mb-5">
     <div class="col-2">
-      <select class="form-select" @change="updateKeywordType" ref="keywordTypeRef">
-        <option value="none" selected>선택</option>
-        <option value="author">작성자</option>
-        <option value="title">제목</option>
+      <select v-model="keywordType" class="form-select" ref="keywordTypeRef">
+        <option v-for="option, i in keywordTypeOptions" :key="i" :value="option.value">
+          {{ option.label }}
+        </option>
       </select>
     </div>
     <div class="col-4">
@@ -103,10 +99,10 @@ const formatDate = computed(() => {
     <thead>
       <tr>
         <th class="text-center">#</th>
-        <th>제목</th>
-        <th class="text-center">작성자</th>
-        <th class="text-center">작성일시</th>
-        <th class="text-center">조회수</th>
+        <th>Title</th>
+        <th class="text-center">Author</th>
+        <th class="text-center">Create Date</th>
+        <th class="text-center">View</th>
       </tr>
     </thead>
     <tbody>

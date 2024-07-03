@@ -1,42 +1,43 @@
 <script setup>
-import { ref, onBeforeMount, computed } from "vue";
-import Axios from "axios";
-import { useRoute, useRouter } from "vue-router";
+import { ref, onBeforeMount, computed } from "vue"
+import Axios from "axios"
+import { useRoute, useRouter } from "vue-router"
+import CommentComponent from "@/components/CommentComponent"
 
-const route = useRoute();
-const router = useRouter();
-const board = ref(new Object());
+const route = useRoute()
+const router = useRouter()
+const board = ref(new Object())
 
 onBeforeMount(() => {
-  searchBoardView();
-});
+  searchBoardView()
+})
 
 /**
  * 작성된 게시글을 삭제합니다.
  */
 const deleteBoard = () => {
-  const password = prompt("비밀번호를 입력하세요.");
+  const password = prompt("비밀번호를 입력하세요.")
   if (password != null) {
     if (password == "") {
-      alert("비밀번호를 입력하세요.");
+      alert("비밀번호를 입력하세요.")
     } else if (password == board.value.password) {
-      Axios.delete("http://localhost:8070/boards", {
+      Axios.delete("http://localhost:8070/comments", {
         params: {
           no: route.query.no,
         },
       })
         .then(() => {
-          alert("삭제가 완료되었습니다.");
-          router.push({ name: "list" });
+          alert("삭제가 완료되었습니다.")
+          router.push({ name: "list" })
         })
         .catch((error) => {
-          console.log(error);
-        });
+          console.log(error)
+        })
     } else {
-      alert("비밀번호가 일치하지 않습니다.");
+      alert("비밀번호가 일치하지 않습니다.")
     }
   }
-};
+}
 
 /**
  * 작성된 게시글을 가져옵니다.
@@ -45,46 +46,46 @@ const searchBoardView = () => {
   Axios.get("http://localhost:8070/boards", {
     params: {
       no: route.query.no,
-      page: "view",
+      departure: "view",
     },
   })
     .then((response) => {
       if (typeof response.data == "string") {
-        alert("데이터가 존재하지 않습니다.");
-        router.go(-1);
+        alert("데이터가 존재하지 않습니다.")
+        router.go(-1)
       } else {
-        board.value = response.data;
+        board.value = response.data
       }
     })
     .catch((error) => {
-      console.log(error);
-    });
-};
+      console.log(error)
+    })
+}
 
 /**
  * 수정 페이지로 이동합니다.
  */
 const moveModifyPage = () => {
-  router.push({ name: "modify", params: { no: board.value.boardNo } });
-};
+  router.push({ name: "modify", params: { no: board.value.boardNo } })
+}
 
 /**
  * 목록 페이지로 이동합니다.
  */
 const moveListPage = () => {
-  router.push({ name: "list" });
-  // router.go(-1);
-};
+  router.push({ name: "list" })
+  // router.go(-1)
+}
 
 const formatDate = computed(() => {
   return (val) => {
-    let formattedDate = "";
+    let formattedDate = ""
     if (val) {
-      formattedDate = val.substr(0, 10);
+      formattedDate = val.substr(0, 10)
     }
-    return formattedDate;
-  };
-});
+    return formattedDate
+  }
+})
 </script>
 <template>
   <div v-if="Object.keys(board).length > 0">
@@ -122,6 +123,6 @@ const formatDate = computed(() => {
         </button>
       </div>
     </div>
-    <CommentComponent />
+    <CommentComponent :boardNo=board.boardNo />
   </div>
 </template>

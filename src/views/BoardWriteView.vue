@@ -1,14 +1,14 @@
 <script setup>
-import Axios from "axios";
-import { useRouter } from "vue-router";
-import { ref, getCurrentInstance } from "vue";
+import Axios from "axios"
+import { useRouter } from "vue-router"
+import { ref, getCurrentInstance } from "vue"
 
-const { proxy } = getCurrentInstance();
-const router = useRouter();
-const author = ref(new String());
-const password = ref(new String());
-const title = ref(new String());
-const content = ref(new String());
+const { proxy } = getCurrentInstance()
+const router = useRouter()
+const author = ref(new String())
+const password = ref(new String())
+const title = ref(new String())
+const content = ref(new String())
 
 /**
  * 작성된 글을 저장합니다.
@@ -16,24 +16,24 @@ const content = ref(new String());
 const saveBoard = () => {
   // 유효성 검사 후 실패 시 alert 및 focusing
   if (author.value == "" || author.value == null) {
-    alert("작성자를 입력해 주세요");
-    proxy.$refs.authorRef.focus();
-    return false;
+    alert("작성자를 입력해 주세요")
+    proxy.$refs.authorRef.focus()
+    return false
   }
   if (password.value == "" || password.value == null) {
-    alert("비밀번호를 입력해 주세요");
-    proxy.$refs.passwordRef.focus();
-    return false;
+    alert("비밀번호를 입력해 주세요")
+    proxy.$refs.passwordRef.focus()
+    return false
   }
   if (title.value == "" || title.value == null) {
-    alert("제목을 입력해 주세요");
-    proxy.$refs.titleRef.focus();
-    return false;
+    alert("제목을 입력해 주세요")
+    proxy.$refs.titleRef.focus()
+    return false
   }
   if (content.value == "" || content.value == null) {
-    alert("내용을 입력해 주세요");
-    proxy.$refs.contentRef.focus();
-    return false;
+    alert("내용을 입력해 주세요")
+    proxy.$refs.contentRef.focus()
+    return false
   }
 
   Axios.post("http://localhost:8070/boards", {
@@ -44,24 +44,24 @@ const saveBoard = () => {
   })
     .then((response) => {
       if (response.data == 1) {
-        alert("작성이 완료되었습니다.");
-        moveBackPage();
+        alert("작성이 완료되었습니다.")
+        moveBackPage()
       } else {
-        alert("작성이 실패되었습니다.");
+        alert("작성이 실패되었습니다.")
       }
     })
     .catch((error) => {
-      console.log(error);
-    });
-};
+      console.log(error)
+    })
+}
 
 /**
  * 목록 페이지로 이동합니다.
  */
 const moveBackPage = () => {
-  router.push({ name: "list" });
-  // router.go(-1);
-};
+  router.push({ name: "list" })
+  // router.go(-1)
+}
 
 </script>
 
