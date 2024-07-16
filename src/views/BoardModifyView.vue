@@ -16,7 +16,7 @@ onMounted(() => {
  * 작성된 게시글 가져옵니다.
  */
 const searchBoardView = () => {
-  Axios.get("http://localhost:8070/boards", {
+  Axios.get("http://ec2-43-202-244-139.ap-northeast-2.compute.amazonaws.com:8070/boards", {
     params: {
       no: route.params.no,
       departure: "modify",
@@ -85,7 +85,7 @@ const saveBoardView = () => {
     return false
   }
 
-  Axios.put("http://localhost:8070/boards", {
+  Axios.put("http://ec2-43-202-244-139.ap-northeast-2.compute.amazonaws.com:8070/boards", {
     boardNo: route.params.no,
     author: board.value.author,
     password: board.value.password,

@@ -36,7 +36,7 @@ const saveBoard = () => {
     return false
   }
 
-  Axios.post("http://localhost:8070/boards", {
+  Axios.post("http://ec2-43-202-244-139.ap-northeast-2.compute.amazonaws.com:8070/boards", {
     author: author.value,
     password: password.value,
     title: title.value,
@@ -89,12 +89,12 @@ const moveBackPage = () => {
     </div>
   </div>
   <div class="row mb-3 justify-content-end">
-    <div class="col-1">
+    <div class="col-sm-1 col-6">
       <button type="button" class="w-100 btn btn-outline-primary" @click="saveBoard">
         Save
       </button>
     </div>
-    <div class="col-1">
+    <div class="col-sm-1 col-6">
       <button type="button" class="w-100 btn btn-outline-danger" @click="moveBackPage">
         Back
       </button>

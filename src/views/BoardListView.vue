@@ -33,7 +33,7 @@ const searchBoardList = (page) => {
     keywordTypeRef.value.focus()
     return false
   }
-  Axios.get("http://localhost:8070/boards/list", {
+  Axios.get("http://ec2-43-202-244-139.ap-northeast-2.compute.amazonaws.com:8070/boards/list", {
     params: {
       keyword: searchKeyword.value,
       type: keywordType.value,

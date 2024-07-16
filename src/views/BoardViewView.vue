@@ -21,7 +21,7 @@ const deleteBoard = () => {
     if (password == "") {
       alert("비밀번호를 입력하세요.")
     } else if (password == board.value.password) {
-      Axios.delete("http://localhost:8070/comments", {
+      Axios.delete("http://ec2-43-202-244-139.ap-northeast-2.compute.amazonaws.com:8070/comments", {
         params: {
           no: route.query.no,
         },
@@ -43,7 +43,7 @@ const deleteBoard = () => {
  * 작성된 게시글을 가져옵니다.
  */
 const searchBoardView = () => {
-  Axios.get("http://localhost:8070/boards", {
+  Axios.get("http://ec2-43-202-244-139.ap-northeast-2.compute.amazonaws.com:8070/boards", {
     params: {
       no: route.query.no,
       departure: "view",
