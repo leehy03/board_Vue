@@ -14,15 +14,19 @@ const keywordTypeOptions = [
 ]
 let keywordType = ref(keywordTypeOptions[0].value)
 let keywordTypeRef = ref(null)
+let pageSize = 5
+const totalCount = ref(new Number())
+const currentPage = ref(new Number())
+
 // vue3 lifecycle hooks 찾아보기
 onMounted(() => {
-  searchBoardList()
+    searchBoardList(1)
 })
 
 /**
  * 게시글 목록을 불러옵니다.
  */
-const searchBoardList = () => {
+const searchBoardList = (page) => {
   if (keywordType.value == keywordTypeOptions[0].value && searchKeyword.value.length > 0) {
     alert("유형을 선택해 주세요")
     // proxy.$refs.keywordTypeRef.focus()
@@ -33,10 +37,14 @@ const searchBoardList = () => {
     params: {
       keyword: searchKeyword.value,
       type: keywordType.value,
+      pageSize: pageSize,
+      currentPage: page,
     },
   })
     .then(function (response) {
-      boardList.value = response.data
+      boardList.value = response.data.contents
+      totalCount.value = response.data.totalCount
+      currentPage.value = response.data.currentPage
     })
     .catch(function (error) {
       console.log(error)
@@ -75,6 +83,15 @@ const formatDate = computed(() => {
     return formattedDate
   }
 })
+
+/**
+ * 사용자가 선택한 페이지의 게시글 데이터를 조회합니다.
+ *
+ * @param {Number} page
+ */
+const updateCurrentPage = (page) =>{
+  searchBoardList(page)
+}
 </script>
 
 <template>
@@ -90,7 +107,7 @@ const formatDate = computed(() => {
       <input type="text" class="form-control" placeholder="검색어를 입력하세요." v-model="searchKeyword" />
     </div>
     <div class="col-1">
-      <button type="button" class="btn btn-outline-success" @click="searchBoardList">
+      <button type="button" class="btn btn-outline-success" @click="searchBoardList(currentPage)">
         조회
       </button>
     </div>
@@ -120,6 +137,12 @@ const formatDate = computed(() => {
       <button type="button" class="btn btn-outline-primary" @click="moveWritePage()">
         Write
       </button>
+    </div>
+  </div>
+  <div class="row justify-content-center">
+    <div class="col-6">
+      <b-pagination align="center" @change="updateCurrentPage" v-model="currentPage" :total-rows="totalCount" :per-page="pageSize" first-number
+        last-number></b-pagination>
     </div>
   </div>
   <div>
